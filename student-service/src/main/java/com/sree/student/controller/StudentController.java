@@ -14,27 +14,27 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping
+    @RequestMapping(method = RequestMethod.GET)
     public Collection<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
 
-    @GetMapping("/students/{studentId}")
+    @RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
     public Student getStudentById(@PathVariable("studentId") int rollNo) {
         return studentService.getStudentById(rollNo);
     }
 
-    @PostMapping
+    @RequestMapping(method = RequestMethod.POST)
     public Student addStudent(@RequestBody Student student) {
         return studentService.addStudent(student);
     }
 
-    @DeleteMapping("/students/{studentId}")
+    @RequestMapping(value = "/{studentId}", method = RequestMethod.DELETE)
     public void deleteStudentById(@PathVariable("studentId") int rollNo) {
         studentService.deleteStudentById(rollNo);
     }
 
-    @PutMapping("/students/{studentId}")
+    @RequestMapping(value = "/{studentId}", method = RequestMethod.PUT)
     public Student updateStudentById(@PathVariable("studentId") int rollNo, @RequestBody Student student) {
         return studentService.updateStudentById(rollNo, student);
     }
