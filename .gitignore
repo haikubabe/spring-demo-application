@@ -3,3 +3,5 @@ SpringDemoApplication.iml
 
 student-service/student-service.iml
 student-service/target
+
+department-service/department-service.iml

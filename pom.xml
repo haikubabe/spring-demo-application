@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>student-service</module>
+        <module>department-service</module>
     </modules>
 
 

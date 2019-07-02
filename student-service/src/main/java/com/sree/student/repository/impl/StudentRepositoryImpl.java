@@ -59,6 +59,7 @@ public class StudentRepositoryImpl implements StudentRepository {
             throw new StudentNotFoundException("studentId - " + rollNo + " is not found, so it cannot be updated");
         }
         Student s = studentMap.get(rollNo);
+        s.setRollNo(student.getRollNo());
         s.setName(student.getName());
         s.setCourse(student.getCourse());
         return s;
