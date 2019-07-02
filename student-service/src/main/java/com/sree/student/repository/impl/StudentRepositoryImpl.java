@@ -41,22 +41,26 @@ public class StudentRepositoryImpl implements StudentRepository {
         s.setRollNo(student.getRollNo());
         s.setName(student.getName());
         s.setCourse(student.getCourse());
+        studentMap.put(s.getRollNo(), s);
         return s;
     }
 
     @Override
     public void deleteStudentById(int rollNo) {
-        if (studentMap.get(rollNo) == null)
+        if (studentMap.get(rollNo) == null) {
             throw new StudentNotFoundException("studentId - " + rollNo + " is not found, so it cannot be deleted");
+        }
         studentMap.remove(rollNo);
     }
 
     @Override
     public Student updateStudentById(int rollNo, Student student) {
+        if (studentMap.get(rollNo) == null) {
+            throw new StudentNotFoundException("studentId - " + rollNo + " is not found, so it cannot be updated");
+        }
         Student s = studentMap.get(rollNo);
         s.setName(student.getName());
         s.setCourse(student.getCourse());
         return s;
     }
-
 }

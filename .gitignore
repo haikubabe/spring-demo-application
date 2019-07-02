@@ -1,3 +1,5 @@
 .idea/
 SpringDemoApplication.iml
+
+student-service/student-service.iml
 student-service/target
