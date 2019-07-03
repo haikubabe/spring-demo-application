@@ -1,8 +1,7 @@
-package com.sree.department.controller;
+package com.sree.controller;
 
-import com.sree.department.model.Department;
-import com.sree.department.service.DepartmentService;
-import com.sree.student.model.Student;
+import com.sree.service.DepartmentService;
+import com.sree.model.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,15 +38,4 @@ public class DepartmentController {
     public Department updateDepartmentById(@PathVariable("departmentId") int id, @RequestBody Department department) {
         return departmentService.updateDepartmentById(id, department);
     }
-
-    @GetMapping("/{departmentId}/students")
-    public Collection<Student> getAllStudentsInDepartment(@PathVariable("departmentId") int id) {
-        return departmentService.getAllStudentsInDepartment(id);
-    }
-
-    @GetMapping("/{departmentId}/students/{studentId}")
-    public Student getStudentInDepartment(@PathVariable("departmentId") int id, @PathVariable("studentId") int rollNo) {
-        return departmentService.getStudentInDepartment(id, rollNo);
-    }
-
 }

@@ -1,10 +1,11 @@
-package com.sree.student.model;
+package com.sree.model;
 
 public class Student {
 
     private int rollNo;
     private String name;
     private String course;
+    private int departmentId;
 
     public Student() {
 
@@ -38,5 +39,13 @@ public class Student {
 
     public void setCourse(String course) {
         this.course = course;
+    }
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 }

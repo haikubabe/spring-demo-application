@@ -1,6 +1,4 @@
-package com.sree.department.model;
-
-import com.sree.student.model.Student;
+package com.sree.model;
 
 import java.util.ArrayList;
 import java.util.List;

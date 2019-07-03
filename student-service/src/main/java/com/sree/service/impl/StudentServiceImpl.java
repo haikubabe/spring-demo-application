@@ -1,12 +1,13 @@
-package com.sree.student.service.impl;
+package com.sree.service.impl;
 
-import com.sree.student.model.Student;
-import com.sree.student.repository.StudentRepository;
-import com.sree.student.service.StudentService;
+import com.sree.repository.StudentRepository;
+import com.sree.model.Student;
+import com.sree.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -39,4 +40,8 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.updateStudentById(rollNo, student);
     }
 
+    @Override
+    public List<Student> findByDepartment(int departmentId) {
+        return studentRepository.findByDepartment(departmentId);
+    }
 }

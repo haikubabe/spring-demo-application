@@ -1,8 +1,9 @@
-package com.sree.student.service;
+package com.sree.service;
 
-import com.sree.student.model.Student;
+import com.sree.model.Student;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface StudentService {
 
@@ -15,4 +16,6 @@ public interface StudentService {
     void deleteStudentById(int rollNo);
 
     Student updateStudentById(int rollNo, Student student);
+
+    List<Student> findByDepartment(int departmentId);
 }

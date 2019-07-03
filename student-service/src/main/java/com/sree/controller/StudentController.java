@@ -1,11 +1,12 @@
-package com.sree.student.controller;
+package com.sree.controller;
 
-import com.sree.student.model.Student;
-import com.sree.student.service.StudentService;
+import com.sree.service.StudentService;
+import com.sree.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/students")
@@ -39,4 +40,8 @@ public class StudentController {
         return studentService.updateStudentById(rollNo, student);
     }
 
+    @GetMapping("/departments/{departmentId}/students")
+    public List<Student> findByDepartment(@PathVariable int departmentId) {
+        return studentService.findByDepartment(departmentId);
+    }
 }

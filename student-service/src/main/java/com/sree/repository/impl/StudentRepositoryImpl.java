@@ -1,26 +1,16 @@
-package com.sree.student.repository.impl;
+package com.sree.repository.impl;
 
-import com.sree.student.exception.StudentNotFoundException;
-import com.sree.student.model.Student;
-import com.sree.student.repository.StudentRepository;
+import com.sree.exception.StudentNotFoundException;
+import com.sree.model.Student;
+import com.sree.repository.StudentRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class StudentRepositoryImpl implements StudentRepository {
 
-    private static Map<Integer,Student> studentMap = new HashMap<>();
-
-    static {
-        studentMap.put(1, new Student(1, "Sreemoyee", "Computer Science"));
-        studentMap.put(2, new Student(2, "Sushmita", "Computer Science"));
-        studentMap.put(3, new Student(3, "Sudip", "Biology"));
-        studentMap.put(4, new Student(4, "Kumar", "Maths"));
-    }
-
+    private static Map<Integer, Student> studentMap = new HashMap<>();
 
     @Override
     public Collection<Student> getAllStudents() {
@@ -41,6 +31,7 @@ public class StudentRepositoryImpl implements StudentRepository {
         s.setRollNo(student.getRollNo());
         s.setName(student.getName());
         s.setCourse(student.getCourse());
+        s.setDepartmentId(student.getDepartmentId());
         studentMap.put(s.getRollNo(), s);
         return s;
     }
@@ -62,6 +53,18 @@ public class StudentRepositoryImpl implements StudentRepository {
         s.setRollNo(student.getRollNo());
         s.setName(student.getName());
         s.setCourse(student.getCourse());
+        s.setDepartmentId(student.getDepartmentId());
         return s;
+    }
+
+    @Override
+    public List<Student> findByDepartment(int departmentId) {
+        List<Student> studentList = new ArrayList<>();
+        for (Student s : studentMap.values()) {
+            if (s.getDepartmentId() == departmentId) {
+                studentList.add(s);
+            }
+        }
+        return studentList;
     }
 }

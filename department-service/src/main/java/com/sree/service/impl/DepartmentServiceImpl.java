@@ -1,9 +1,9 @@
-package com.sree.department.service.impl;
+package com.sree.service.impl;
 
-import com.sree.department.model.Department;
-import com.sree.department.repository.DepartmentRepository;
-import com.sree.department.service.DepartmentService;
-import com.sree.student.model.Student;
+import com.sree.repository.DepartmentRepository;
+import com.sree.service.DepartmentService;
+import com.sree.model.Department;
+;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,16 +38,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department updateDepartmentById(int id, Department department) {
         return departmentRepository.updateDepartmentById(id, department);
-    }
-
-    @Override
-    public Collection<Student> getAllStudentsInDepartment(int id) {
-        return departmentRepository.getAllStudentsInDepartment(id);
-    }
-
-    @Override
-    public Student getStudentInDepartment(int id, int rollNo) {
-        return departmentRepository.getStudentInDepartment(id, rollNo);
     }
 
 }

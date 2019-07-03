@@ -1,11 +1,10 @@
-package com.sree.department.repository;
+package com.sree.service;
 
-import com.sree.department.model.Department;
-import com.sree.student.model.Student;
+import com.sree.model.Department;
 
 import java.util.Collection;
 
-public interface DepartmentRepository {
+public interface DepartmentService {
 
     Collection<Department> getAllDepartments();
 
@@ -16,8 +15,4 @@ public interface DepartmentRepository {
     void deleteDepartmentById(int id);
 
     Department updateDepartmentById(int id, Department department);
-
-    Collection<Student> getAllStudentsInDepartment(int id);
-
-    Student getStudentInDepartment(int id, int rollNo);
 }
