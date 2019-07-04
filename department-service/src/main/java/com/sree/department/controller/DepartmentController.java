@@ -2,6 +2,7 @@ package com.sree.department.controller;
 
 import com.sree.department.service.DepartmentService;
 import com.sree.department.model.Department;
+import com.sree.preview.DepartmentPreview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,17 +16,17 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @GetMapping
-    public Collection<Department> getAllDepartments() {
+    public Collection<DepartmentPreview> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
 
     @GetMapping("/{departmentId}")
-    public Department getDepartmentById(@PathVariable("departmentId") int id) {
+    public DepartmentPreview getDepartmentById(@PathVariable("departmentId") int id) {
         return departmentService.getDepartmentById(id);
     }
 
     @PostMapping
-    public Department addDepartment(@RequestBody Department department) {
+    public DepartmentPreview addDepartment(@RequestBody DepartmentPreview department) {
         return departmentService.addDepartment(department);
     }
 
@@ -35,7 +36,7 @@ public class DepartmentController {
     }
 
     @PutMapping("/{departmentId}")
-    public Department updateDepartmentById(@PathVariable("departmentId") int id, @RequestBody Department department) {
+    public DepartmentPreview updateDepartmentById(@PathVariable("departmentId") int id, @RequestBody DepartmentPreview department) {
         return departmentService.updateDepartmentById(id, department);
     }
 

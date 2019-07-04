@@ -4,6 +4,7 @@ import com.sree.department.repository.DepartmentRepository;
 import com.sree.department.service.DepartmentService;
 import com.sree.department.model.Department;
 ;
+import com.sree.preview.DepartmentPreview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +17,17 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
 
     @Override
-    public Collection<Department> getAllDepartments() {
+    public Collection<DepartmentPreview> getAllDepartments() {
         return departmentRepository.getAllDepartments();
     }
 
     @Override
-    public Department getDepartmentById(int id) {
+    public DepartmentPreview getDepartmentById(int id) {
         return departmentRepository.getDepartmentById(id);
     }
 
     @Override
-    public Department addDepartment(Department department) {
+    public DepartmentPreview addDepartment(DepartmentPreview department) {
         return departmentRepository.addDepartment(department);
     }
 
@@ -36,7 +37,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department updateDepartmentById(int id, Department department) {
+    public DepartmentPreview updateDepartmentById(int id, DepartmentPreview department) {
         return departmentRepository.updateDepartmentById(id, department);
     }
 
