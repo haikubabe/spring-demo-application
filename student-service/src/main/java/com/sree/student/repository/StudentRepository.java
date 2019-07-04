@@ -1,10 +1,8 @@
 package com.sree.student.repository;
 
-import com.sree.preview.StudentPreview;
 import com.sree.student.model.Student;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface StudentRepository {
 
@@ -18,5 +16,4 @@ public interface StudentRepository {
 
     Student updateStudentById(int studentId, Student student);
 
-    List<StudentPreview> findByDepartment(int departmentId);
 }

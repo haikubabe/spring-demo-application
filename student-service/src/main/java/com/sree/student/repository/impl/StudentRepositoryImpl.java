@@ -1,11 +1,10 @@
 package com.sree.student.repository.impl;
 
 import com.sree.exception.DepartmentNotFoundException;
-import com.sree.preview.DepartmentPreview;
-import com.sree.preview.StudentPreview;
 import com.sree.exception.StudentNotFoundException;
-import com.sree.student.repository.StudentRepository;
+import com.sree.preview.DepartmentPreview;
 import com.sree.student.model.Student;
+import com.sree.student.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class StudentRepositoryImpl implements StudentRepository {
@@ -70,25 +71,17 @@ public class StudentRepositoryImpl implements StudentRepository {
         return s;
     }
 
-    @Override
-    public List<StudentPreview> findByDepartment(int departmentId) {
-        List<StudentPreview> studentList = new ArrayList<>();
-        for (Student s : studentMap.values()) {
-            if (s.getDepartmentId() == departmentId) {
-                studentList.add(new StudentPreview(s.getId(), s.getName(), s.getCourse()));
-            } else {
-                throw new DepartmentNotFoundException("departmentId - " + departmentId + " is not found");
-            }
-        }
-        return studentList;
-    }
-
     private DepartmentPreview findDepartmentById(int id) {
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        ResponseEntity<DepartmentPreview> responseEntity =
-                restTemplate.exchange("http://localhost:8082/departments/" + id, HttpMethod.GET, null,
-                        new ParameterizedTypeReference<DepartmentPreview>() {
-                        });
-        return responseEntity.getBody();
+        try {
+            RestTemplate restTemplate = restTemplateBuilder.build();
+            ResponseEntity<DepartmentPreview> responseEntity =
+                    restTemplate.exchange("http://localhost:8082/departments/" + id, HttpMethod.GET, null,
+                            new ParameterizedTypeReference<DepartmentPreview>() {
+                            });
+            return responseEntity.getBody();
+        } catch (DepartmentNotFoundException e) {
+            throw new DepartmentNotFoundException("departmentId - " + id + " is not found");
+        }
+
     }
 }

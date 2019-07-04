@@ -42,7 +42,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department findStudentByDepartment(int id) {
-        return departmentRepository.findStudentByDepartment(id);
+    public Department findStudentsByDepartment(int id) {
+        return departmentRepository.findStudentsByDepartment(id);
     }
 }

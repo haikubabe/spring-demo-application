@@ -66,7 +66,7 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     }
 
     @Override
-    public Department findStudentByDepartment(int id) {
+    public Department findStudentsByDepartment(int id) {
         DepartmentPreview departmentPreview = getDepartmentById(id);
         RestTemplate restTemplate = restTemplateBuilder.build();
         ResponseEntity<List<StudentPreview>> responseEntity =

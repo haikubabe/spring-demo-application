@@ -3,10 +3,12 @@ package com.sree.department.controller;
 import com.sree.department.service.DepartmentService;
 import com.sree.department.model.Department;
 import com.sree.preview.DepartmentPreview;
+import com.sree.preview.StudentPreview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/departments")
@@ -40,8 +42,8 @@ public class DepartmentController {
         return departmentService.updateDepartmentById(id, department);
     }
 
-    @GetMapping("/{departmentId}/with-students")
-    public Department findStudentByDepartment(@PathVariable("departmentId") int id) {
-        return departmentService.findStudentByDepartment(id);
+    @GetMapping("/departments/{departmentId}/students")
+    public List<StudentPreview> findByDepartment(@PathVariable int departmentId) {
+        return departmentService.findByDepartment(departmentId);
     }
 }

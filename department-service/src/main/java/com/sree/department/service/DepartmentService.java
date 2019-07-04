@@ -17,5 +17,5 @@ public interface DepartmentService {
 
     DepartmentPreview updateDepartmentById(int id, DepartmentPreview department);
 
-    Department findStudentByDepartment(int id);
+    Department findStudentsByDepartment(int id);
 }
