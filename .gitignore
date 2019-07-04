@@ -1,8 +1,15 @@
 .idea/
 SpringDemoApplication.iml
+spring-demo-app.iml
 
 student-service/student-service.iml
 student-service/target
 
 department-service/department-service.iml
 department-service/target
+
+preview-model/preview-model.iml
+preview-model/target
+
+exception-model/exception-model.iml
+exception-model/target

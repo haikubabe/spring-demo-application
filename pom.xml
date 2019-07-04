@@ -18,6 +18,8 @@
     <modules>
         <module>student-service</module>
         <module>department-service</module>
+        <module>preview-model</module>
+        <module>exception-model</module>
     </modules>
 
 
