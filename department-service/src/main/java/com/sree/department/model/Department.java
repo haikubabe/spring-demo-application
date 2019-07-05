@@ -1,15 +1,9 @@
 package com.sree.department.model;
 
-import com.sree.preview.StudentPreview;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Department {
 
     private int id;
     private String name;
-    private List<StudentPreview> studentList = new ArrayList<>();
 
     public Department() {
 
@@ -36,11 +30,4 @@ public class Department {
         this.name = name;
     }
 
-    public List<StudentPreview> getStudentList() {
-        return studentList;
-    }
-
-    public void setStudentList(List<StudentPreview> studentList) {
-        this.studentList = studentList;
-    }
 }

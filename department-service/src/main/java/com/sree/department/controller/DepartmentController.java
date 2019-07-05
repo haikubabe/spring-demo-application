@@ -3,12 +3,10 @@ package com.sree.department.controller;
 import com.sree.department.service.DepartmentService;
 import com.sree.department.model.Department;
 import com.sree.preview.DepartmentPreview;
-import com.sree.preview.StudentPreview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @RequestMapping("/departments")
@@ -18,17 +16,17 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @GetMapping
-    public Collection<DepartmentPreview> getAllDepartments() {
+    public Collection<Department> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
 
     @GetMapping("/{departmentId}")
-    public DepartmentPreview getDepartmentById(@PathVariable("departmentId") int id) {
+    public Department getDepartmentById(@PathVariable("departmentId") int id) {
         return departmentService.getDepartmentById(id);
     }
 
     @PostMapping
-    public DepartmentPreview addDepartment(@RequestBody DepartmentPreview department) {
+    public Department addDepartment(@RequestBody Department department) {
         return departmentService.addDepartment(department);
     }
 
@@ -38,12 +36,12 @@ public class DepartmentController {
     }
 
     @PutMapping("/{departmentId}")
-    public DepartmentPreview updateDepartmentById(@PathVariable("departmentId") int id, @RequestBody DepartmentPreview department) {
+    public Department updateDepartmentById(@PathVariable("departmentId") int id, @RequestBody Department department) {
         return departmentService.updateDepartmentById(id, department);
     }
 
-    @GetMapping("/departments/{departmentId}/students")
-    public List<StudentPreview> findByDepartment(@PathVariable int departmentId) {
-        return departmentService.findByDepartment(departmentId);
+    @GetMapping("/{departmentId}/students")
+    public DepartmentPreview findStudentsByDepartment(@PathVariable int departmentId) {
+        return departmentService.findStudentsByDepartment(departmentId);
     }
 }

@@ -6,6 +6,10 @@ public class StudentPreview {
     private String name;
     private String course;
 
+    public StudentPreview() {
+
+    }
+
     public StudentPreview(int id, String name, String course) {
         this.id = id;
         this.name = name;

@@ -3,6 +3,7 @@ package com.sree.student.repository.impl;
 import com.sree.exception.DepartmentNotFoundException;
 import com.sree.exception.StudentNotFoundException;
 import com.sree.preview.DepartmentPreview;
+import com.sree.preview.StudentPreview;
 import com.sree.student.model.Student;
 import com.sree.student.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
 public class StudentRepositoryImpl implements StudentRepository {
-
-    @Autowired
-    private RestTemplateBuilder restTemplateBuilder;
 
     private static Map<Integer, Student> studentMap = new HashMap<>();
 
@@ -44,8 +44,7 @@ public class StudentRepositoryImpl implements StudentRepository {
         s.setId(student.getId());
         s.setName(student.getName());
         s.setCourse(student.getCourse());
-        DepartmentPreview departmentPreview = findDepartmentById(student.getDepartmentId());
-        s.setDepartmentId(departmentPreview.getId());
+        s.setDepartmentId(student.getDepartmentId());
         studentMap.put(s.getId(), s);
         return s;
     }
@@ -71,17 +70,22 @@ public class StudentRepositoryImpl implements StudentRepository {
         return s;
     }
 
-    private DepartmentPreview findDepartmentById(int id) {
-        try {
-            RestTemplate restTemplate = restTemplateBuilder.build();
-            ResponseEntity<DepartmentPreview> responseEntity =
-                    restTemplate.exchange("http://localhost:8082/departments/" + id, HttpMethod.GET, null,
-                            new ParameterizedTypeReference<DepartmentPreview>() {
-                            });
-            return responseEntity.getBody();
-        } catch (DepartmentNotFoundException e) {
-            throw new DepartmentNotFoundException("departmentId - " + id + " is not found");
+    @Override
+    public List<StudentPreview> findStudentsByDepartment(int departmentId) {
+        List<StudentPreview> studentList = new ArrayList<>();
+        for (Student student : studentMap.values()) {
+            if (student.getDepartmentId() == departmentId) {
+                StudentPreview studentPreview = new StudentPreview();
+                studentPreview.setId(student.getId());
+                studentPreview.setName(student.getName());
+                studentPreview.setCourse(student.getCourse());
+                studentList.add(studentPreview);
+            }
         }
-
+        if (studentList.size() == 0) {
+            throw new StudentNotFoundException("No students found in this department");
+        }
+        return studentList;
     }
+
 }

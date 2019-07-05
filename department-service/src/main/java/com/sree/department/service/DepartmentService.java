@@ -7,15 +7,15 @@ import java.util.Collection;
 
 public interface DepartmentService {
 
-    Collection<DepartmentPreview> getAllDepartments();
+    Collection<Department> getAllDepartments();
 
-    DepartmentPreview getDepartmentById(int id);
+    Department getDepartmentById(int id);
 
-    DepartmentPreview addDepartment(DepartmentPreview department);
+    Department addDepartment(Department department);
 
     void deleteDepartmentById(int id);
 
-    DepartmentPreview updateDepartmentById(int id, DepartmentPreview department);
+    Department updateDepartmentById(int id, Department department);
 
-    Department findStudentsByDepartment(int id);
+    DepartmentPreview findStudentsByDepartment(int id);
 }

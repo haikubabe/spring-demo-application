@@ -1,21 +1,14 @@
 package com.sree.preview;
 
+import java.util.List;
+
 public class DepartmentPreview {
 
-    private int id;
     private String name;
+    private List<StudentPreview> studentPreviewList;
 
-    public DepartmentPreview(int id, String name) {
-        this.id = id;
+    public DepartmentPreview(String name) {
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -24,5 +17,13 @@ public class DepartmentPreview {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<StudentPreview> getStudentPreviewList() {
+        return studentPreviewList;
+    }
+
+    public void setStudentPreviewList(List<StudentPreview> studentPreviewList) {
+        this.studentPreviewList = studentPreviewList;
     }
 }

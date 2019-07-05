@@ -3,6 +3,7 @@ package com.sree.department.repository.impl;
 import com.sree.exception.DepartmentNotFoundException;
 import com.sree.department.repository.DepartmentRepository;
 import com.sree.department.model.Department;
+import com.sree.exception.StudentNotFoundException;
 import com.sree.preview.DepartmentPreview;
 import com.sree.preview.StudentPreview;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +25,15 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     @Autowired
     private RestTemplateBuilder restTemplateBuilder;
 
-    private static Map<Integer, DepartmentPreview> departmentMap = new HashMap<>();
+    private static Map<Integer, Department> departmentMap = new HashMap<>();
 
     @Override
-    public Collection<DepartmentPreview> getAllDepartments() {
+    public Collection<Department> getAllDepartments() {
         return departmentMap.values();
     }
 
     @Override
-    public DepartmentPreview getDepartmentById(int id) {
+    public Department getDepartmentById(int id) {
         if (departmentMap.get(id) == null) {
             throw new DepartmentNotFoundException("departmentId - " + id + " is not found");
         }
@@ -40,8 +41,10 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     }
 
     @Override
-    public DepartmentPreview addDepartment(DepartmentPreview department) {
-        DepartmentPreview d = new DepartmentPreview(department.getId(), department.getName());
+    public Department addDepartment(Department department) {
+        Department d = new Department();
+        d.setId(department.getId());
+        d.setName(department.getName());
         departmentMap.put(d.getId(), d);
         return d;
     }
@@ -55,27 +58,30 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     }
 
     @Override
-    public DepartmentPreview updateDepartmentById(int id, DepartmentPreview department) {
+    public Department updateDepartmentById(int id, Department department) {
         if (departmentMap.get(id) == null) {
             throw new DepartmentNotFoundException("departmentId - " + id + " is not found, so it cannot be updated");
         }
-        DepartmentPreview d = departmentMap.get(id);
+        Department d = departmentMap.get(id);
         d.setId(department.getId());
         d.setName(department.getName());
         return d;
     }
 
     @Override
-    public Department findStudentsByDepartment(int id) {
-        DepartmentPreview departmentPreview = getDepartmentById(id);
+    public DepartmentPreview findStudentsByDepartment(int id) {
+        Department department = getDepartmentById(id);
         RestTemplate restTemplate = restTemplateBuilder.build();
         ResponseEntity<List<StudentPreview>> responseEntity =
-                restTemplate.exchange("http://localhost:8080/departments/" + id + "/students", HttpMethod.GET, null,
+                restTemplate.exchange("http://localhost:8080/students?departmentId=" + id, HttpMethod.GET, null,
                         new ParameterizedTypeReference<List<StudentPreview>>() {
                         });
         List<StudentPreview> studentPreviewList = responseEntity.getBody();
-        Department department = new Department(departmentPreview.getId(), departmentPreview.getName());
-        department.setStudentList(studentPreviewList);
-        return department;
+        if (studentPreviewList.size() == 0) {
+            throw new StudentNotFoundException("No students found in this department");
+        }
+        DepartmentPreview departmentPreview = new DepartmentPreview(department.getName());
+        departmentPreview.setStudentPreviewList(studentPreviewList);
+        return departmentPreview;
     }
 }

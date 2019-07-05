@@ -17,17 +17,17 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
 
     @Override
-    public Collection<DepartmentPreview> getAllDepartments() {
+    public Collection<Department> getAllDepartments() {
         return departmentRepository.getAllDepartments();
     }
 
     @Override
-    public DepartmentPreview getDepartmentById(int id) {
+    public Department getDepartmentById(int id) {
         return departmentRepository.getDepartmentById(id);
     }
 
     @Override
-    public DepartmentPreview addDepartment(DepartmentPreview department) {
+    public Department addDepartment(Department department) {
         return departmentRepository.addDepartment(department);
     }
 
@@ -37,12 +37,12 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentPreview updateDepartmentById(int id, DepartmentPreview department) {
+    public Department updateDepartmentById(int id, Department department) {
         return departmentRepository.updateDepartmentById(id, department);
     }
 
     @Override
-    public Department findStudentsByDepartment(int id) {
+    public DepartmentPreview findStudentsByDepartment(int id) {
         return departmentRepository.findStudentsByDepartment(id);
     }
 }
