@@ -1,22 +1,19 @@
 package com.sree.student.repository;
 
-import com.sree.preview.StudentPreview;
-import com.sree.student.model.Student;
+import com.sree.dto.Department;
+import com.sree.dto.Student;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 
-public interface StudentRepository {
+@Repository
+public interface StudentRepository extends JpaRepository<Student, Integer> {
 
-    Collection<Student> getAllStudents();
+    @Query("SELECT d FROM Student s INNER JOIN s.department d WHERE d.id = :departmentId")
+    Department findDepartmentById(int departmentId);
 
-    Student getStudentById(int studentId);
-
-    Student addStudent(Student student);
-
-    void deleteStudentById(int studentId);
-
-    Student updateStudentById(int studentId, Student student);
-
-    List<StudentPreview> findStudentsByDepartment(int departmentId);
+    @Query("SELECT s FROM Department d INNER JOIN d.students s WHERE d.id = :departmentId")
+    List<Student> findStudentsByDepartmentId(int departmentId);
 }

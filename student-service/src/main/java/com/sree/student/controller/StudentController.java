@@ -1,48 +1,47 @@
 package com.sree.student.controller;
 
-import com.sree.preview.StudentPreview;
-import com.sree.student.model.Student;
+import com.sree.dto.Student;
+import com.sree.dto.StudentDto;
 import com.sree.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/students")
 public class StudentController {
 
     @Autowired
     private StudentService studentService;
 
-    @GetMapping("/students")
-    public Collection<Student> getAllStudents() {
+    @GetMapping
+    public List<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
 
-    @GetMapping("/students/{studentId}")
+    @GetMapping("/{studentId}")
     public Student getStudentById(@PathVariable("studentId") int studentId) {
         return studentService.getStudentById(studentId);
     }
 
-    @PostMapping("/students")
-    public Student addStudent(@RequestBody Student student) {
-        return studentService.addStudent(student);
+    @PostMapping
+    public void addStudent(@RequestBody Student student) {
+        studentService.addStudent(student);
     }
 
-    @DeleteMapping("/students/{studentId}")
+    @DeleteMapping("/{studentId}")
     public void deleteStudentById(@PathVariable("studentId") int studentId) {
         studentService.deleteStudentById(studentId);
     }
 
-    @PutMapping("/students/{studentId}")
-    public Student updateStudentById(@PathVariable("studentId") int studentId, @RequestBody Student student) {
-        return studentService.updateStudentById(studentId, student);
+    @PutMapping("/{studentId}")
+    public void updateStudentById(@PathVariable("studentId") int studentId, @RequestBody StudentDto student) {
+        studentService.updateStudentById(studentId, student);
     }
 
-    @GetMapping(value = "students")
-    public List<StudentPreview> findStudentsByDepartment(@RequestParam(name = "departmentId") int departmentId) {
+    /*@GetMapping("/departments")
+    public List<StudentPreviewDto> findStudentsByDepartment(@RequestParam(value = "departmentId") int departmentId) {
         return studentService.findStudentsByDepartment(departmentId);
-    }
+    }*/
 }

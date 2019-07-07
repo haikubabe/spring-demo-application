@@ -1,29 +1,13 @@
-package com.sree.student.model;
+package com.sree.dto;
 
-public class Student {
+public class StudentDto {
 
-    private int id;
     private String name;
     private String course;
     private int departmentId;
 
-    public Student() {
+    public StudentDto() {
 
-    }
-
-    public Student(int id, String name, String course, int departmentId) {
-        this.id = id;
-        this.name = name;
-        this.course = course;
-        this.departmentId = departmentId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

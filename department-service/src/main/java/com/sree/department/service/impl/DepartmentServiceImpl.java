@@ -2,13 +2,13 @@ package com.sree.department.service.impl;
 
 import com.sree.department.repository.DepartmentRepository;
 import com.sree.department.service.DepartmentService;
-import com.sree.department.model.Department;
-;
-import com.sree.preview.DepartmentPreview;
+import com.sree.dto.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
+
+;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -17,18 +17,25 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
 
     @Override
-    public Collection<Department> getAllDepartments() {
-        return departmentRepository.getAllDepartments();
+    public List<Department> getAllDepartments() {
+        /*List<DepartmentPreviewDto> department = new ArrayList<>();
+        for (Department d : departmentRepository.findAll()) {
+            DepartmentPreviewDto departmentPreviewDto = new DepartmentPreviewDto();
+            departmentPreviewDto.setName(d.getName());
+            List<Student> students = d.getStudents();
+            departmentPreviewDto.setStudents(d.getStudents());
+        }*/
+        return departmentRepository.findAll();
     }
 
     @Override
-    public Department getDepartmentById(int id) {
+    public void addDepartment(Department department) {
+        departmentRepository.save(department);
+    }
+
+    /*@Override
+    public DepartmentPreviewDto getDepartmentById(int id) {
         return departmentRepository.getDepartmentById(id);
-    }
-
-    @Override
-    public Department addDepartment(Department department) {
-        return departmentRepository.addDepartment(department);
     }
 
     @Override
@@ -42,7 +49,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentPreview findStudentsByDepartment(int id) {
+    public DepartmentPreviewDto findStudentsByDepartment(int id) {
         return departmentRepository.findStudentsByDepartment(id);
-    }
+    }*/
 }
