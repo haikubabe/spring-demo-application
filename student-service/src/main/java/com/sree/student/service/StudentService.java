@@ -11,7 +11,7 @@ public interface StudentService {
 
     Student getStudentById(int studentId);
 
-    void addStudent(Student student);
+    void addStudent(Student student, int departmentId);
 
     void deleteStudentById(int studentId);
 

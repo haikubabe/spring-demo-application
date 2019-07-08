@@ -1,10 +1,9 @@
 package com.sree.dto;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-public class Student implements Serializable {
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -12,10 +11,9 @@ public class Student implements Serializable {
     private String name;
     private String course;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name = "dept_id", referencedColumnName = "id"),
-            @JoinColumn(name = "dept_name", referencedColumnName = "name")
+            @JoinColumn(name = "departmentId", referencedColumnName = "id")
     })
     private Department department;
 
@@ -55,4 +53,5 @@ public class Student implements Serializable {
     public void setDepartment(Department department) {
         this.department = department;
     }
+
 }

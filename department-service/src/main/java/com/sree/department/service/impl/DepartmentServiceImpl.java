@@ -3,10 +3,12 @@ package com.sree.department.service.impl;
 import com.sree.department.repository.DepartmentRepository;
 import com.sree.department.service.DepartmentService;
 import com.sree.dto.Department;
+import com.sree.exception.DepartmentNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 ;
 
@@ -18,14 +20,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public List<Department> getAllDepartments() {
-        /*List<DepartmentPreviewDto> department = new ArrayList<>();
-        for (Department d : departmentRepository.findAll()) {
-            DepartmentPreviewDto departmentPreviewDto = new DepartmentPreviewDto();
-            departmentPreviewDto.setName(d.getName());
-            List<Student> students = d.getStudents();
-            departmentPreviewDto.setStudents(d.getStudents());
-        }*/
         return departmentRepository.findAll();
+    }
+
+    @Override
+    public Department getDepartmentById(int id) {
+        Optional<Department> department = departmentRepository.findById(id);
+        return department.orElseThrow(() -> new DepartmentNotFoundException("department with id " + id + " is not found"));
     }
 
     @Override
@@ -34,11 +35,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     /*@Override
-    public DepartmentPreviewDto getDepartmentById(int id) {
-        return departmentRepository.getDepartmentById(id);
-    }
-
-    @Override
     public void deleteDepartmentById(int id) {
         departmentRepository.deleteDepartmentById(id);
     }

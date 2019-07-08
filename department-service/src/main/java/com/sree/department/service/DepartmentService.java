@@ -8,13 +8,11 @@ public interface DepartmentService {
 
     List<Department> getAllDepartments();
 
+    Department getDepartmentById(int id);
+
     void addDepartment(Department department);
 
-    /*DepartmentPreviewDto getDepartmentById(int id);
-
-
-
-    void deleteDepartmentById(int id);
+    /*void deleteDepartmentById(int id);
 
     void updateDepartmentById(int id, Department department);
 

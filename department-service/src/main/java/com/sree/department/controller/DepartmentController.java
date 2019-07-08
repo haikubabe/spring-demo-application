@@ -19,19 +19,17 @@ public class DepartmentController {
         return departmentService.getAllDepartments();
     }
 
+    @GetMapping("/{departmentId}")
+    public Department getDepartmentById(@PathVariable("departmentId") int id) {
+        return departmentService.getDepartmentById(id);
+    }
+
     @PostMapping
     public void addDepartment(@RequestBody Department department) {
         departmentService.addDepartment(department);
     }
 
-    /*@GetMapping("/{departmentId}")
-    public DepartmentPreviewDto getDepartmentById(@PathVariable("departmentId") int id) {
-        return departmentService.getDepartmentById(id);
-    }
-
-
-
-    @DeleteMapping("/{departmentId}")
+    /*@DeleteMapping("/{departmentId}")
     public void deleteDepartmentById(@PathVariable("departmentId") int id) {
         departmentService.deleteDepartmentById(id);
     }

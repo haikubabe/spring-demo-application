@@ -1,5 +1,6 @@
 package com.sree.student.service.impl;
 
+import com.sree.department.repository.DepartmentRepository;
 import com.sree.dto.Department;
 import com.sree.dto.Student;
 import com.sree.dto.StudentDto;
@@ -9,6 +10,7 @@ import com.sree.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +19,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public List<Student> getAllStudents() {
@@ -35,7 +43,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student getStudentById(int studentId) {
         Optional<Student> student = studentRepository.findById(studentId);
-        return student.orElseThrow(() -> new StudentNotFoundException("student with id " + student + " is not found"));
+        return student.orElseThrow(() -> new StudentNotFoundException("student with id " + studentId + " is not found"));
         /*StudentPreviewDto studentPreviewDto = new StudentPreviewDto();
         studentPreviewDto.setName(s.getName());
         studentPreviewDto.setCourse(s.getCourse());
@@ -43,19 +51,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void addStudent(Student student) {
-        Department department = studentRepository.findDepartmentById(student.getDepartment().getId());
+    public void addStudent(Student student, int departmentId) {
+        Department department = entityManager.find(Department.class, departmentId);
+//        Department department = d.orElseThrow(() -> new DepartmentNotFoundException("department with id " + departmentId + " is not found"));
         student.setDepartment(department);
         department.getStudents().add(student);
         studentRepository.save(student);
-        /*if (department != null) {
-            student.setDepartment(department);
-            department.getStudents().add(student);
-            studentRepository.save(student);
-        } else {
-            throw new DepartmentNotFoundException("department with id " + studentDto.getDepartmentId() + " doesn't exist");
-        }*/
-
     }
 
     @Override

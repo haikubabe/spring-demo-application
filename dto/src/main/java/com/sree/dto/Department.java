@@ -1,19 +1,18 @@
 package com.sree.dto;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Department implements Serializable {
+public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
 
-    @OneToMany(mappedBy = "department")
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
     private List<Student> students;
 
     public Department() {
@@ -22,7 +21,7 @@ public class Department implements Serializable {
 
     public Department(String name) {
         this.name = name;
-        this.students = new ArrayList<>();
+        this.students = new ArrayList<Student>();
     }
 
     public int getId() {
