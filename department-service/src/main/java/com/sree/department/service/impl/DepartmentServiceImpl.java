@@ -3,6 +3,7 @@ package com.sree.department.service.impl;
 import com.sree.department.repository.DepartmentRepository;
 import com.sree.department.service.DepartmentService;
 import com.sree.dto.Department;
+import com.sree.dto.DepartmentPreviewDto;
 import com.sree.exception.DepartmentNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,14 +38,18 @@ public class DepartmentServiceImpl implements DepartmentService {
     /*@Override
     public void deleteDepartmentById(int id) {
         departmentRepository.deleteDepartmentById(id);
-    }
+    }*/
 
     @Override
-    public Department updateDepartmentById(int id, Department department) {
-        return departmentRepository.updateDepartmentById(id, department);
+    public void updateDepartmentById(int id, Department department) {
+        Optional<Department> d = departmentRepository.findById(id);
+        Department department1 = d.orElseThrow(() -> new DepartmentNotFoundException("department with id " + id + " is not found"));
+        department1.setName(department.getName());
+        department1.setStudents(department.getStudents());
+        departmentRepository.save(department1);
     }
 
-    @Override
+    /*@Override
     public DepartmentPreviewDto findStudentsByDepartment(int id) {
         return departmentRepository.findStudentsByDepartment(id);
     }*/

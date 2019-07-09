@@ -1,6 +1,7 @@
 package com.sree.department.service;
 
 import com.sree.dto.Department;
+import com.sree.dto.DepartmentPreviewDto;
 
 import java.util.List;
 
@@ -12,9 +13,9 @@ public interface DepartmentService {
 
     void addDepartment(Department department);
 
-    /*void deleteDepartmentById(int id);
+//    void deleteDepartmentById(int id);
 
     void updateDepartmentById(int id, Department department);
 
-    DepartmentPreviewDto findStudentsByDepartment(int id);*/
+//    DepartmentPreviewDto findStudentsByDepartment(int id);
 }

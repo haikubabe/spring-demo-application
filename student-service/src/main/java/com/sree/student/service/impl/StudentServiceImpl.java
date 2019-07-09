@@ -4,13 +4,22 @@ import com.sree.department.repository.DepartmentRepository;
 import com.sree.dto.Department;
 import com.sree.dto.Student;
 import com.sree.dto.StudentDto;
+import com.sree.exception.DepartmentNotFoundException;
 import com.sree.exception.StudentNotFoundException;
 import com.sree.student.repository.StudentRepository;
 import com.sree.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +33,7 @@ public class StudentServiceImpl implements StudentService {
     private DepartmentRepository departmentRepository;
 
     @Autowired
-    private EntityManager entityManager;
+    private RestTemplateBuilder restTemplateBuilder;
 
     @Override
     public List<Student> getAllStudents() {
@@ -51,11 +60,28 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void addStudent(Student student, int departmentId) {
-        Department department = entityManager.find(Department.class, departmentId);
-//        Department department = d.orElseThrow(() -> new DepartmentNotFoundException("department with id " + departmentId + " is not found"));
+    public void addStudent(Student student) {
+        /*RestTemplate restTemplate = restTemplateBuilder.build();
+        ResponseEntity<Department> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + 1,
+                HttpMethod.GET, null, new ParameterizedTypeReference<Department>(){});
+        Department department = responseEntity.getBody();
+        if (department == null) {
+            throw new DepartmentNotFoundException("department with id " + 1 + " is not found");
+        }
         student.setDepartment(department);
         department.getStudents().add(student);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Department> requestEntity = new HttpEntity<>(department, requestHeaders);
+
+        ResponseEntity<Void> responseEntity1 = restTemplate.exchange("http://localhost:8082/departments/" + 1,
+                HttpMethod.PUT, requestEntity, Void.class);
+
+        if (responseEntity1.getStatusCode() == HttpStatus.OK) {
+            studentRepository.save(student);
+        }*/
         studentRepository.save(student);
     }
 

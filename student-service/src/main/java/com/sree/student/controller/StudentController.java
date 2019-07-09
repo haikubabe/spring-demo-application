@@ -9,24 +9,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/students")
 public class StudentController {
 
     @Autowired
     private StudentService studentService;
 
-    @GetMapping("/students")
+    @GetMapping
     public List<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
 
-    @GetMapping("/students/{studentId}")
+    @GetMapping("/{studentId}")
     public Student getStudentById(@PathVariable("studentId") int studentId) {
         return studentService.getStudentById(studentId);
     }
 
-    @PostMapping("/departments/{departmentId}/student")
-    public void addStudent(@RequestBody Student student, @PathVariable("departmentId") int departmentId) {
-        studentService.addStudent(student, departmentId);
+    @PostMapping
+    public void addStudent(@RequestBody Student student) {
+        studentService.addStudent(student);
     }
 
     @DeleteMapping("/students/{studentId}")

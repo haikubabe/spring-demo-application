@@ -43,4 +43,9 @@ public class Department {
     public void setStudents(List<Student> students) {
         this.students = students;
     }
+
+    public void addStudent(Student student) {
+        this.students.add(student);
+        student.setDepartment(this);
+    }
 }

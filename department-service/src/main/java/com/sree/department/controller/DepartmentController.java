@@ -32,14 +32,14 @@ public class DepartmentController {
     /*@DeleteMapping("/{departmentId}")
     public void deleteDepartmentById(@PathVariable("departmentId") int id) {
         departmentService.deleteDepartmentById(id);
-    }
+    }*/
 
     @PutMapping("/{departmentId}")
-    public Department updateDepartmentById(@PathVariable("departmentId") int id, @RequestBody Department department) {
-        return departmentService.updateDepartmentById(id, department);
+    public void updateDepartmentById(@PathVariable("departmentId") int id, @RequestBody Department department) {
+        departmentService.updateDepartmentById(id, department);
     }
 
-    @GetMapping("/{departmentId}/students")
+    /*@GetMapping("/{departmentId}/students")
     public DepartmentPreviewDto findStudentsByDepartment(@PathVariable int departmentId) {
         return departmentService.findStudentsByDepartment(departmentId);
     }*/

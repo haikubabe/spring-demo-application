@@ -1,5 +1,7 @@
 package com.sree.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,10 +13,9 @@ public class Student {
     private String name;
     private String course;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumns({
-            @JoinColumn(name = "departmentId", referencedColumnName = "id")
-    })
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = true, insertable = true)
+    @JsonIgnore
     private Department department;
 
     public Student() {
