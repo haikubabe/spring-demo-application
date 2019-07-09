@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "department")
 public class Department {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "department",
+                cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                            CascadeType.DETACH, CascadeType.REFRESH})
     private List<Student> students;
 
     public Department() {
@@ -21,7 +24,6 @@ public class Department {
 
     public Department(String name) {
         this.name = name;
-        this.students = new ArrayList<Student>();
     }
 
     public int getId() {
@@ -44,8 +46,23 @@ public class Department {
         this.students = students;
     }
 
+    /**
+     * bidirectional relationship between department and student
+     * @param student
+     */
     public void addStudent(Student student) {
-        this.students.add(student);
+        if (students == null) {
+            students = new ArrayList<>();
+        }
+        students.add(student);
         student.setDepartment(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Department{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

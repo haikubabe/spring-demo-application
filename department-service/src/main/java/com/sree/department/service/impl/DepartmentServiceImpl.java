@@ -3,7 +3,6 @@ package com.sree.department.service.impl;
 import com.sree.department.repository.DepartmentRepository;
 import com.sree.department.service.DepartmentService;
 import com.sree.dto.Department;
-import com.sree.dto.DepartmentPreviewDto;
 import com.sree.exception.DepartmentNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         Optional<Department> d = departmentRepository.findById(id);
         Department department1 = d.orElseThrow(() -> new DepartmentNotFoundException("department with id " + id + " is not found"));
         department1.setName(department.getName());
-        department1.setStudents(department.getStudents());
         departmentRepository.save(department1);
     }
 

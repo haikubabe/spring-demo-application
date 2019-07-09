@@ -61,7 +61,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void addStudent(Student student) {
-        /*RestTemplate restTemplate = restTemplateBuilder.build();
+        RestTemplate restTemplate = restTemplateBuilder.build();
         ResponseEntity<Department> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + 1,
                 HttpMethod.GET, null, new ParameterizedTypeReference<Department>(){});
         Department department = responseEntity.getBody();
@@ -81,8 +81,7 @@ public class StudentServiceImpl implements StudentService {
 
         if (responseEntity1.getStatusCode() == HttpStatus.OK) {
             studentRepository.save(student);
-        }*/
-        studentRepository.save(student);
+        }
     }
 
     @Override
