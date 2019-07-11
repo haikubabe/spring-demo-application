@@ -1,7 +1,6 @@
 package com.sree.department.service;
 
 import com.sree.dto.Department;
-import com.sree.dto.DepartmentPreviewDto;
 
 import java.util.List;
 

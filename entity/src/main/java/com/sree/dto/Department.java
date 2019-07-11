@@ -2,6 +2,7 @@ package com.sree.dto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -11,6 +12,8 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "department",
@@ -23,6 +26,7 @@ public class Department {
     }
 
     public Department(String name) {
+        super();
         this.name = name;
     }
 
@@ -39,7 +43,7 @@ public class Department {
     }
 
     public List<Student> getStudents() {
-        return students;
+        return Collections.unmodifiableList(students);
     }
 
     public void setStudents(List<Student> students) {

@@ -12,7 +12,7 @@
     <modules>
         <module>student-service</module>
         <module>department-service</module>
-        <module>dto</module>
+        <module>entity</module>
         <module>exception-model</module>
     </modules>
 

@@ -8,8 +8,8 @@ student-service/target
 department-service/department-service.iml
 department-service/target
 
-dto/dto.iml
-dto/target
+entity/entity.iml
+entity/target
 
 exception-model/exception-model.iml
 exception-model/target

@@ -1,21 +1,21 @@
 package com.sree.student.service;
 
 import com.sree.dto.Student;
-import com.sree.dto.StudentDto;
+import com.sree.dto.StudentPreviewDto;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface StudentService {
 
-    List<Student> getAllStudents();
+    Collection<StudentPreviewDto> getAllStudents();
 
-    Student getStudentById(int studentId);
+    StudentPreviewDto getStudentById(int studentId);
 
     void addStudent(Student student);
 
     void deleteStudentById(int studentId);
 
-    void updateStudentById(int studentId, StudentDto studentDto);
+    void updateStudentById(int studentId, Student student);
 
 //    List<StudentPreviewDto> findStudentsByDepartment(int departmentId);
 }

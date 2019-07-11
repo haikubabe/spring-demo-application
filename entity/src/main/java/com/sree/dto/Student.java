@@ -1,8 +1,14 @@
 package com.sree.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="student")
@@ -11,13 +17,16 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String course;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                             CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "department_id", nullable = false)
-    @JsonIgnore
+    @JoinColumn(name = "department_id")
     private Department department;
 
     public Student() {
@@ -25,6 +34,7 @@ public class Student {
     }
 
     public Student(String name, String course) {
+        super();
         this.name = name;
         this.course = course;
     }

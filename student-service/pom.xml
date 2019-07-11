@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>com.springboot.demo</groupId>
-            <artifactId>dto</artifactId>
+            <artifactId>entity</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
