@@ -17,8 +17,7 @@ public class Department {
     private String name;
 
     @OneToMany(mappedBy = "department",
-                cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                            CascadeType.DETACH, CascadeType.REFRESH})
+                cascade = CascadeType.ALL)
     private List<Student> students;
 
     public Department() {
@@ -46,9 +45,6 @@ public class Department {
         return Collections.unmodifiableList(students);
     }
 
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
 
     /**
      * bidirectional relationship between department and student
