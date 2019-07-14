@@ -65,19 +65,24 @@ public class DepartmentServiceImpl implements DepartmentService {
         oldDepartment.setStudents(department.getStudents());
         departmentRepository.save(oldDepartment);
 
+        DepartmentPreviewDto departmentPreviewDto;
+        List<StudentPreviewDto> students = convertToPreviewDto(oldDepartment.getStudents(), oldDepartment.getName());
+
         if (departmentPreviewDtoHashMap.get(id) != null) {
-            DepartmentPreviewDto departmentPreviewDto = departmentPreviewDtoHashMap.get(id);
+            departmentPreviewDto = departmentPreviewDtoHashMap.get(id);
             departmentPreviewDto.setId(oldDepartment.getId());
             departmentPreviewDto.setName(oldDepartment.getName());
-            departmentPreviewDto.getStudentList().add()
+            List<StudentPreviewDto> oldStudents = departmentPreviewDto.getStudentList();
+            for (StudentPreviewDto s : students) {
+                oldStudents.add(s);
+            }
+            departmentPreviewDto.setStudentList(oldStudents);
         } else {
-
+            departmentPreviewDto = new DepartmentPreviewDto();
+            departmentPreviewDto.setId(oldDepartment.getId());
+            departmentPreviewDto.setName(oldDepartment.getName());
+            departmentPreviewDto.setStudentList(students);
         }
-        DepartmentPreviewDto departmentPreviewDto = new DepartmentPreviewDto();
-        departmentPreviewDto.setId(oldDepartment.getId());
-        departmentPreviewDto.setName(oldDepartment.getName());
-        List<StudentPreviewDto> students = convertToPreviewDto(oldDepartment.getStudents(), oldDepartment.getName());
-        List<StudentPreviewDto> studentPreviewDtos =
 
         departmentPreviewDtoHashMap.put(id, departmentPreviewDto);
     }

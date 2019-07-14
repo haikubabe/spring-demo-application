@@ -71,9 +71,7 @@ public class StudentServiceImpl implements StudentService {
         studentPreviewDto.setDepartmentName(department.getName());
         studentPreviewDtoMap.put(newStudent.getId(), studentPreviewDto);
 
-        //find the newly added student from the database
-        Optional<Student> s = studentRepository.findById(newStudent.getId());
-        Student existingStudent = s.get();
+
         department.addStudent(existingStudent);
         //update the existing student with the department id
 //        studentRepository.save(existingStudent);
