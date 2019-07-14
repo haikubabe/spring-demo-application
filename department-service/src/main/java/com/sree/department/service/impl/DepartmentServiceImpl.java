@@ -3,12 +3,14 @@ package com.sree.department.service.impl;
 import com.sree.department.repository.DepartmentRepository;
 import com.sree.department.service.DepartmentService;
 import com.sree.dto.Department;
+import com.sree.dto.DepartmentPreviewDto;
+import com.sree.dto.Student;
+import com.sree.dto.StudentPreviewDto;
 import com.sree.exception.DepartmentNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 ;
 
@@ -18,37 +20,83 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+    private Map<Integer, DepartmentPreviewDto> departmentPreviewDtoHashMap = new HashMap<>();
+
     @Override
-    public List<Department> getAllDepartments() {
-        return departmentRepository.findAll();
+    public Collection<DepartmentPreviewDto> getAllDepartments() {
+        return Collections.unmodifiableMap(departmentPreviewDtoHashMap).values();
     }
 
     @Override
-    public Department getDepartmentById(int id) {
-        Optional<Department> department = departmentRepository.findById(id);
-        return department.orElseThrow(() -> new DepartmentNotFoundException("department with id " + id + " is not found"));
+    public DepartmentPreviewDto getDepartmentById(int id) {
+        Optional<Department> d = departmentRepository.findById(id);
+        Department department = d.orElseThrow(() -> new DepartmentNotFoundException("department with id " + id + " is not found"));
+        return departmentPreviewDtoHashMap.get(department.getId());
     }
 
     @Override
     public void addDepartment(Department department) {
+        //while adding the department do not set the list of students in it
+        department.setStudents(null);
         departmentRepository.save(department);
+        DepartmentPreviewDto departmentPreviewDto = new DepartmentPreviewDto();
+        departmentPreviewDto.setId(department.getId());
+        departmentPreviewDto.setName(department.getName());
+        departmentPreviewDtoHashMap.put(department.getId(), departmentPreviewDto);
     }
 
-    /*@Override
+    @Override
     public void deleteDepartmentById(int id) {
-        departmentRepository.deleteDepartmentById(id);
-    }*/
+        departmentRepository.deleteById(id);
+    }
 
+    /**
+     * when this update method is invoked from department service do not pass the student list in the department object
+     * but when this method is invoked from the student service pass the student list
+     * @param id
+     * @param department
+     */
     @Override
     public void updateDepartmentById(int id, Department department) {
+        //find the existing department
         Optional<Department> d = departmentRepository.findById(id);
-        Department department1 = d.orElseThrow(() -> new DepartmentNotFoundException("department with id " + id + " is not found"));
-        department1.setName(department.getName());
-        departmentRepository.save(department1);
+        Department oldDepartment = d.orElseThrow(() -> new DepartmentNotFoundException("department with id " + id + " is not found"));
+        oldDepartment.setName(department.getName());
+        oldDepartment.setStudents(department.getStudents());
+        departmentRepository.save(oldDepartment);
+
+        if (departmentPreviewDtoHashMap.get(id) != null) {
+            DepartmentPreviewDto departmentPreviewDto = departmentPreviewDtoHashMap.get(id);
+            departmentPreviewDto.setId(oldDepartment.getId());
+            departmentPreviewDto.setName(oldDepartment.getName());
+            departmentPreviewDto.getStudentList().add()
+        } else {
+
+        }
+        DepartmentPreviewDto departmentPreviewDto = new DepartmentPreviewDto();
+        departmentPreviewDto.setId(oldDepartment.getId());
+        departmentPreviewDto.setName(oldDepartment.getName());
+        List<StudentPreviewDto> students = convertToPreviewDto(oldDepartment.getStudents(), oldDepartment.getName());
+        List<StudentPreviewDto> studentPreviewDtos =
+
+        departmentPreviewDtoHashMap.put(id, departmentPreviewDto);
     }
 
     /*@Override
     public DepartmentPreviewDto findStudentsByDepartment(int id) {
         return departmentRepository.findStudentsByDepartment(id);
     }*/
+
+    private List<StudentPreviewDto> convertToPreviewDto(List<Student> students, String departmentName) {
+        List<StudentPreviewDto> studentPreviewDtoList = new ArrayList<>();
+        for (Student student : students) {
+            StudentPreviewDto s = new StudentPreviewDto();
+            s.setId(student.getId());
+            s.setName(student.getName());
+            s.setCourse(student.getCourse());
+            s.setDepartmentName(departmentName);
+            studentPreviewDtoList.add(s);
+        }
+        return studentPreviewDtoList;
+    }
 }

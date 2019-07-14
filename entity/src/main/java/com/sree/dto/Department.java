@@ -2,7 +2,6 @@ package com.sree.dto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -16,8 +15,8 @@ public class Department {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "department",
-                cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "department", cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
     private List<Student> students;
 
     public Department() {
@@ -42,9 +41,12 @@ public class Department {
     }
 
     public List<Student> getStudents() {
-        return Collections.unmodifiableList(students);
+        return students;
     }
 
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
 
     /**
      * bidirectional relationship between department and student

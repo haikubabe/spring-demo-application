@@ -11,16 +11,11 @@ import com.sree.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -52,8 +47,8 @@ public class StudentServiceImpl implements StudentService {
             throw new DepartmentNullException("department cannot be null");
         }
         Department department;
+        RestTemplate restTemplate = restTemplateBuilder.build();
         try {
-            RestTemplate restTemplate = restTemplateBuilder.build();
             ResponseEntity<Department> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + student.getDepartment().getId(),
                     HttpMethod.GET, null, new ParameterizedTypeReference<Department>() {
                     });
@@ -76,37 +71,62 @@ public class StudentServiceImpl implements StudentService {
         studentPreviewDto.setDepartmentName(department.getName());
         studentPreviewDtoMap.put(newStudent.getId(), studentPreviewDto);
 
-        //find the newly added student
+        //find the newly added student from the database
         Optional<Student> s = studentRepository.findById(newStudent.getId());
         Student existingStudent = s.get();
         department.addStudent(existingStudent);
         //update the existing student with the department id
-        studentRepository.save(existingStudent);
+//        studentRepository.save(existingStudent);
+
+        List<Student> students = department.getStudents();
+        List<Student> newStudents = new ArrayList<>();
+        for (Student stu:students) {
+            stu.setDepartment(null);
+            newStudents.add(stu);
+        }
+
+        //update the department with the new student
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Department> requestEntity = new HttpEntity<>(department, requestHeaders);
+
+        ResponseEntity<Void> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + department.getId(),
+                HttpMethod.PUT, requestEntity, Void.class);
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            System.out.println("Department with id " + department.getId() + " is updated");
+        }
     }
 
     @Override
     public void deleteStudentById(int studentId) {
         studentRepository.deleteById(studentId);
+        //delete that particular student from the department it belongs to
     }
 
     @Override
     public void updateStudentById(int studentId, Student student) {
-        if (student.getDepartment() == null) {
-            throw new DepartmentNullException("department cannot be null");
-        }
+        //find the existing student
         Optional<Student> s = studentRepository.findById(studentId);
         Student oldStudent = s.orElseThrow(() -> new StudentNotFoundException("student with id " + studentId + " is not found"));
         oldStudent.setName(student.getName());
         oldStudent.setCourse(student.getCourse());
 
         StudentPreviewDto studentPreviewDto = new StudentPreviewDto();
-        studentPreviewDto.setId(studentId);
-        studentPreviewDto.setName(oldStudent.getName());
-        studentPreviewDto.setCourse(oldStudent.getCourse());
+        int departmentId;
+
+        //you are updating the student details in the same department
+        if (student.getDepartment() == null || student.getDepartment().getId() == oldStudent.getDepartment().getId()) {
+            departmentId = oldStudent.getDepartment().getId();
+        }
+        //you are updating the student details in the new department
+        else {
+            departmentId = student.getDepartment().getId();
+        }
 
         try {
             RestTemplate restTemplate = restTemplateBuilder.build();
-            ResponseEntity<Department> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + student.getDepartment().getId(),
+            ResponseEntity<Department> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + departmentId,
                     HttpMethod.GET, null, new ParameterizedTypeReference<Department>() {
                     });
             Department department = responseEntity.getBody();
@@ -116,8 +136,15 @@ public class StudentServiceImpl implements StudentService {
             throw new DepartmentNotFoundException("department with id " + student.getDepartment().getId() + " is not found");
         }
 
-        studentPreviewDtoMap.put(studentId, studentPreviewDto);
+        //save the existing student with updated details
         studentRepository.save(oldStudent);
+
+        //create student preview model
+        studentPreviewDto.setId(oldStudent.getId());
+        studentPreviewDto.setName(oldStudent.getName());
+        studentPreviewDto.setCourse(oldStudent.getCourse());
+
+        studentPreviewDtoMap.put(studentId, studentPreviewDto);
     }
 
     /*@Override

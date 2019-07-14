@@ -1,18 +1,19 @@
 package com.sree.department.service;
 
 import com.sree.dto.Department;
+import com.sree.dto.DepartmentPreviewDto;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface DepartmentService {
 
-    List<Department> getAllDepartments();
+    Collection<DepartmentPreviewDto> getAllDepartments();
 
-    Department getDepartmentById(int id);
+    DepartmentPreviewDto getDepartmentById(int id);
 
     void addDepartment(Department department);
 
-//    void deleteDepartmentById(int id);
+    void deleteDepartmentById(int id);
 
     void updateDepartmentById(int id, Department department);
 

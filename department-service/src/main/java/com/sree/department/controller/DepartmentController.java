@@ -2,10 +2,11 @@ package com.sree.department.controller;
 
 import com.sree.department.service.DepartmentService;
 import com.sree.dto.Department;
+import com.sree.dto.DepartmentPreviewDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/departments")
@@ -15,12 +16,12 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @GetMapping
-    public List<Department> getAllDepartments() {
+    public Collection<DepartmentPreviewDto> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
 
     @GetMapping("/{departmentId}")
-    public Department getDepartmentById(@PathVariable("departmentId") int id) {
+    public DepartmentPreviewDto getDepartmentById(@PathVariable("departmentId") int id) {
         return departmentService.getDepartmentById(id);
     }
 
@@ -29,10 +30,10 @@ public class DepartmentController {
         departmentService.addDepartment(department);
     }
 
-    /*@DeleteMapping("/{departmentId}")
+    @DeleteMapping("/{departmentId}")
     public void deleteDepartmentById(@PathVariable("departmentId") int id) {
         departmentService.deleteDepartmentById(id);
-    }*/
+    }
 
     @PutMapping("/{departmentId}")
     public void updateDepartmentById(@PathVariable("departmentId") int id, @RequestBody Department department) {
