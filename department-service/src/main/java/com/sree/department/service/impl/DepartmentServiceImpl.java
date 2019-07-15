@@ -62,11 +62,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         Optional<Department> d = departmentRepository.findById(id);
         Department oldDepartment = d.orElseThrow(() -> new DepartmentNotFoundException("department with id " + id + " is not found"));
         oldDepartment.setName(department.getName());
-        oldDepartment.setStudents(department.getStudents());
         departmentRepository.save(oldDepartment);
 
         DepartmentPreviewDto departmentPreviewDto;
-        List<StudentPreviewDto> students = convertToPreviewDto(oldDepartment.getStudents(), oldDepartment.getName());
+        List<StudentPreviewDto> students = convertToPreviewDto(department.getStudents(), oldDepartment.getName());
 
         if (departmentPreviewDtoHashMap.get(id) != null) {
             departmentPreviewDto = departmentPreviewDtoHashMap.get(id);
