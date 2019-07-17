@@ -1,16 +1,16 @@
 package com.sree.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DepartmentPreviewDto {
 
     private int id;
     private String name;
-    private List<StudentPreviewDto> studentList;
+    private Map<Integer, StudentPreviewDto> studentList;
 
     public DepartmentPreviewDto() {
-        studentList = new ArrayList<>();
+        studentList = new HashMap<>();
     }
 
     public int getId() {
@@ -29,11 +29,11 @@ public class DepartmentPreviewDto {
         this.name = name;
     }
 
-    public List<StudentPreviewDto> getStudentList() {
+    public Map<Integer, StudentPreviewDto> getStudentList() {
         return studentList;
     }
 
-    public void setStudentList(List<StudentPreviewDto> studentList) {
+    public void setStudentList(Map<Integer, StudentPreviewDto> studentList) {
         this.studentList = studentList;
     }
 

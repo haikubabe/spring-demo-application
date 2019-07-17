@@ -49,6 +49,7 @@ public class Department {
 
     /**
      * bidirectional relationship between department and student
+     *
      * @param student
      */
     public void addStudent(Student student) {
@@ -56,9 +57,14 @@ public class Department {
             students = new ArrayList<>();
         }
         students.add(student);
-        if (student.getDepartment() != this) {
-            student.setDepartment(this);
+        student.setDepartment(this);
+    }
+
+    public void removeStudent(Student student) {
+        if (students.contains(student)) {
+            students.remove(student);
         }
+        student.setDepartment(null);
     }
 
     @Override

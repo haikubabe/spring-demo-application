@@ -101,61 +101,80 @@ public class StudentServiceImpl implements StudentService {
         //find the existing student
         Optional<Student> s = studentRepository.findById(studentId);
         Student oldStudent = s.orElseThrow(() -> new StudentNotFoundException("student with id " + studentId + " is not found"));
-        oldStudent.setName(student.getName());
-        oldStudent.setCourse(student.getCourse());
 
         StudentPreviewDto studentPreviewDto = new StudentPreviewDto();
         int departmentId;
+        Department department;
+        RestTemplate restTemplate = restTemplateBuilder.build();
 
         //you are updating the student details in the same department
         if (student.getDepartment() == null || student.getDepartment().getId() == oldStudent.getDepartment().getId()) {
             departmentId = oldStudent.getDepartment().getId();
+            try {
+                ResponseEntity<Department> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + departmentId,
+                        HttpMethod.GET, null, new ParameterizedTypeReference<Department>() {
+                        });
+                department = responseEntity.getBody();
+            } catch (DepartmentNotFoundException e) {
+                throw new DepartmentNotFoundException("department with id " + student.getDepartment().getId() + " is not found");
+            }
+            oldStudent.setName(student.getName());
+            oldStudent.setCourse(student.getCourse());
+            department.addStudent(oldStudent);
+            //save the existing student with updated details
+            studentRepository.save(oldStudent);
+
+            List<Student> students = department.getStudents();
+            for (Student stu:students) {
+                stu.setDepartment(null);
+            }
+
+            //update the department with the new student
+            HttpHeaders requestHeaders = new HttpHeaders();
+            requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+            HttpEntity<Department> requestEntity = new HttpEntity<>(department, requestHeaders);
+
+            ResponseEntity<Void> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + department.getId(),
+                    HttpMethod.PUT, requestEntity, Void.class);
+
+            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                //create student preview model
+                studentPreviewDto.setId(oldStudent.getId());
+                studentPreviewDto.setName(oldStudent.getName());
+                studentPreviewDto.setCourse(oldStudent.getCourse());
+                studentPreviewDto.setDepartmentName(department.getName());
+                studentPreviewDtoMap.put(studentId, studentPreviewDto);
+            }
+
         }
         //you are updating the student details in the new department
         else {
             departmentId = student.getDepartment().getId();
+            try {
+                ResponseEntity<Department> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + departmentId,
+                        HttpMethod.GET, null, new ParameterizedTypeReference<Department>() {
+                        });
+                department = responseEntity.getBody();
+            } catch (DepartmentNotFoundException e) {
+                throw new DepartmentNotFoundException("department with id " + student.getDepartment().getId() + " is not found");
+            }
+
+            Department oldDepartment;
+            try {
+                ResponseEntity<Department> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + oldStudent.getDepartment().getId(),
+                        HttpMethod.GET, null, new ParameterizedTypeReference<Department>() {
+                        });
+                oldDepartment = responseEntity.getBody();
+            } catch (DepartmentNotFoundException e) {
+                throw new DepartmentNotFoundException("department with id " + student.getDepartment().getId() + " is not found");
+            }
+            oldDepartment.removeStudent(oldStudent);
+
+            
         }
 
-        Department department;
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        try {
-            ResponseEntity<Department> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + departmentId,
-                    HttpMethod.GET, null, new ParameterizedTypeReference<Department>() {
-                    });
-            department = responseEntity.getBody();
-        } catch (DepartmentNotFoundException e) {
-            throw new DepartmentNotFoundException("department with id " + student.getDepartment().getId() + " is not found");
-        }
 
-        department.addStudent(oldStudent);
-        //save the existing student with updated details
-        studentRepository.save(oldStudent);
-
-        List<Student> students = department.getStudents();
-        for (Student stu:students) {
-            stu.setDepartment(null);
-        }
-
-        //update the old department with the new student details
-
-        //remove the student from the old student and add it to the new department
-
-        //update the department with the new student
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Department> requestEntity = new HttpEntity<>(department, requestHeaders);
-
-        ResponseEntity<Void> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + department.getId(),
-                HttpMethod.PUT, requestEntity, Void.class);
-        if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            //create student preview model
-            studentPreviewDto.setId(oldStudent.getId());
-            studentPreviewDto.setName(oldStudent.getName());
-            studentPreviewDto.setCourse(oldStudent.getCourse());
-            studentPreviewDto.setDepartmentName(department.getName());
-            studentPreviewDtoMap.put(studentId, studentPreviewDto);
-        }
     }
 
     /*@Override
