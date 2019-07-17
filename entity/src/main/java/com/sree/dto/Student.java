@@ -17,7 +17,7 @@ public class Student {
     private String course;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                            CascadeType.DETACH, CascadeType.REFRESH})
+                            CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department department;
 

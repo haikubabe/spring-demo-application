@@ -62,7 +62,6 @@ public class StudentServiceImpl implements StudentService {
         newStudent.setCourse(student.getCourse());
         //save the new student without department id
         studentRepository.save(newStudent);
-
         department.addStudent(newStudent);
         //update the existing student with the department id
         studentRepository.save(newStudent);
@@ -75,11 +74,10 @@ public class StudentServiceImpl implements StudentService {
         //update the department with the new student
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-
         HttpEntity<Department> requestEntity = new HttpEntity<>(department, requestHeaders);
-
         ResponseEntity<Void> responseEntity = restTemplate.exchange("http://localhost:8082/departments/" + department.getId(),
                 HttpMethod.PUT, requestEntity, Void.class);
+
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             System.out.println("Department with id " + department.getId() + " is updated");
             //create the student preview model

@@ -36,4 +36,5 @@ public class DepartmentPreviewDto {
     public void setStudentList(List<StudentPreviewDto> studentList) {
         this.studentList = studentList;
     }
+
 }

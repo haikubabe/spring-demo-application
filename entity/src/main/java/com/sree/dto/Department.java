@@ -15,8 +15,7 @@ public class Department {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "department", cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
     private List<Student> students;
 
     public Department() {
@@ -57,7 +56,9 @@ public class Department {
             students = new ArrayList<>();
         }
         students.add(student);
-        student.setDepartment(this);
+        if (student.getDepartment() != this) {
+            student.setDepartment(this);
+        }
     }
 
     @Override

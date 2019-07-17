@@ -36,13 +36,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public void addDepartment(Department department) {
-        //while adding the department do not set the list of students in it
-        department.setStudents(null);
         departmentRepository.save(department);
         DepartmentPreviewDto departmentPreviewDto = new DepartmentPreviewDto();
         departmentPreviewDto.setId(department.getId());
         departmentPreviewDto.setName(department.getName());
         departmentPreviewDtoHashMap.put(department.getId(), departmentPreviewDto);
+
+
     }
 
     @Override
@@ -53,6 +53,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     /**
      * when this update method is invoked from department service do not pass the student list in the department object
      * but when this method is invoked from the student service pass the student list
+     *
      * @param id
      * @param department
      */
@@ -64,25 +65,32 @@ public class DepartmentServiceImpl implements DepartmentService {
         oldDepartment.setName(department.getName());
         departmentRepository.save(oldDepartment);
 
-        DepartmentPreviewDto departmentPreviewDto;
-        List<StudentPreviewDto> students = convertToPreviewDto(department.getStudents(), oldDepartment.getName());
+        DepartmentPreviewDto departmentPreviewDto = departmentPreviewDtoHashMap.get(id);
+        departmentPreviewDto.setId(oldDepartment.getId());
+        departmentPreviewDto.setName(oldDepartment.getName());
+        List<StudentPreviewDto> oldStudents = departmentPreviewDto.getStudentList();
 
-        if (departmentPreviewDtoHashMap.get(id) != null) {
-            departmentPreviewDto = departmentPreviewDtoHashMap.get(id);
-            departmentPreviewDto.setId(oldDepartment.getId());
-            departmentPreviewDto.setName(oldDepartment.getName());
-            List<StudentPreviewDto> oldStudents = departmentPreviewDto.getStudentList();
-            for (StudentPreviewDto s : students) {
-                oldStudents.add(s);
+        boolean required = true;
+
+        for (Student student : department.getStudents()) {
+            StudentPreviewDto studentPreviewDto = new StudentPreviewDto();
+            studentPreviewDto.setId(student.getId());
+            studentPreviewDto.setName(student.getName());
+            studentPreviewDto.setCourse(student.getCourse());
+            studentPreviewDto.setDepartmentName(oldDepartment.getName());
+            for (StudentPreviewDto s : oldStudents) {
+                if (s.getId() == student.getId()) {
+                    oldStudents.set(student.getId()-1, studentPreviewDto);
+                    required = false;
+                }
             }
-            departmentPreviewDto.setStudentList(oldStudents);
-        } else {
-            departmentPreviewDto = new DepartmentPreviewDto();
-            departmentPreviewDto.setId(oldDepartment.getId());
-            departmentPreviewDto.setName(oldDepartment.getName());
-            departmentPreviewDto.setStudentList(students);
+            if (required) {
+                oldStudents.add(student.getId()-1, studentPreviewDto);
+            }
         }
 
+
+        departmentPreviewDto.setStudentList(oldStudents);
         departmentPreviewDtoHashMap.put(id, departmentPreviewDto);
     }
 
@@ -91,16 +99,16 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentRepository.findStudentsByDepartment(id);
     }*/
 
-    private List<StudentPreviewDto> convertToPreviewDto(List<Student> students, String departmentName) {
-        List<StudentPreviewDto> studentPreviewDtoList = new ArrayList<>();
+    private Map<Integer, StudentPreviewDto> convertToPreviewDto(List<Student> students, String departmentName) {
+        Map<Integer, StudentPreviewDto> studentPreviewDtoMap = new HashMap<>();
         for (Student student : students) {
-            StudentPreviewDto s = new StudentPreviewDto();
-            s.setId(student.getId());
-            s.setName(student.getName());
-            s.setCourse(student.getCourse());
-            s.setDepartmentName(departmentName);
-            studentPreviewDtoList.add(s);
+            StudentPreviewDto studentPreviewDto = new StudentPreviewDto();
+            studentPreviewDto.setId(student.getId());
+            studentPreviewDto.setName(student.getName());
+            studentPreviewDto.setCourse(student.getCourse());
+            studentPreviewDto.setDepartmentName(departmentName);
+            studentPreviewDtoMap.put(student.getId(), studentPreviewDto);
         }
-        return studentPreviewDtoList;
+        return studentPreviewDtoMap;
     }
 }
